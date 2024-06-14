@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _incomeController = TextEditingController();
   TextEditingController _taxController = TextEditingController();
+  String _emoji = '';
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   keyboardType: TextInputType.number,
                   style: TextStyle(fontSize: 18.0),
                 ),
+                SizedBox(height: 20.0),
+                Text(
+                  _emoji,
+                  style: TextStyle(fontSize: 40.0),
+                ),
               ],
             ),
           ),
@@ -108,8 +114,20 @@ class _MyHomePageState extends State<MyHomePage> {
       double income = double.parse(_incomeController.text);
       double tax = calculateIncomeTax(income);
       _taxController.text = tax.toStringAsFixed(2);
+      setState(() {
+        if (tax < 1000) {
+          _emoji = '😊'; // Happy face for low tax
+        } else if (tax < 5000) {
+          _emoji = '😐'; // Neutral face for medium tax
+        } else {
+          _emoji = '😢'; // Sad face for high tax
+        }
+      });
     } else {
       _taxController.text = '';
+      setState(() {
+        _emoji = '';
+      });
     }
   }
 
